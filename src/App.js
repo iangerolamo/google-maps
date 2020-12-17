@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export class MapContainer extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      stores: [
+        { latitude: -21.9998595, longitude: -47.8942138, local: "Home" },
+        { latitude: -22.0191882, longitude: -47.8723489, local: "Bola" },]
+    }
+  }
+
+  displayMarkers = () => {
+    return this.state.stores.map((store, index) => {
+      return <Marker key={index} id={index} position={{
+        lat: store.latitude,
+        lng: store.longitude
+      }}
+      />
+    })
+  }
+
+  render() {
+    return (
+
+      <Map
+        google={this.props.google}
+        zoom={15}
+        initialCenter={{ lat: -21.9998595, lng: -47.8942138 }}
+      >
+         {this.displayMarkers()}
+      </Map>
+
+    );
+  }
 }
 
-export default App;
+export default GoogleApiWrapper(
+  (props) => ({
+    apiKey: '',
+  }
+))(MapContainer)
